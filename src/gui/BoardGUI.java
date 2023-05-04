@@ -7,6 +7,11 @@ import java.util.HashMap;
 import com.github.bhlangonijr.chesslib.Board;
 
 
+/**
+ * Class designed to draw the actual chess board given some particular board state.
+ * @author Saurav Kiri
+ * @since May 01 2023
+ */
 public class BoardGUI {
 
     private static JFrame frame;
@@ -38,6 +43,11 @@ public class BoardGUI {
         return new ImageIcon(new ImageIcon(filepath).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
     }
 
+    /**
+     * Draws the current state of a {@code Board} object using Swing, with an 8x8 gridded JFrame
+     * and using the pre-defined chess piece .pngs included in this project.
+     * @param board : a {@code Board} object from the {@code chesslib} library.
+     */
     public static void drawBoard(Board board) {
         initializeFrame();
         HashMap<String, String> pieces = ChessImages.getPieces();

@@ -1,6 +1,11 @@
 package gui;
 import java.util.HashMap;
 
+/**
+ * Defines the image locations for all chess pieces to draw the chess board.
+ * @author Saurav Kiri
+ * @since May 01 2023
+ */
 public class ChessImages {
     
     private static HashMap<String, String> pieces;
@@ -23,6 +28,10 @@ public class ChessImages {
 
     private ChessImages() { }
 
+    /**
+     * Retrieves the set of chess piece string representations and their associated file locations.
+     * @return String/String Hashmap of the pieces and their files.
+     */
     public static HashMap<String, String> getPieces() {
         return pieces;
     }
