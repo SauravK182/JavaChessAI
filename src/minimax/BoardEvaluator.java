@@ -13,7 +13,7 @@ public interface BoardEvaluator {
 
     /**
      * Returns a numerical evaluation of a chess board given a Board object from the chesslib library.
-     * @param board : A Board object from the chesslib library
+     * @param board : A {@code Board} object from the {@code chesslib} library
      * @return a double (or compatible type) representing the evaluation.
      * Positive values represent an advantage for white, negative values represent
      * an advantage for black.

@@ -28,13 +28,13 @@ public class MaterialEvaluator implements BoardEvaluator {
         
         // add white pieces - simply make chars upper case, add positive values
         HashMap<String, Double> whitePieceWeights = new HashMap<>();
-        for (String p: pieceWeight.keySet()) {
-            double whitePieceWeight = (double) -1 * pieceWeight.get(p);
-            whitePieceWeights.put(p.toUpperCase(), whitePieceWeight);
-        }
+        pieceWeight.forEach((key, value) -> {
+            double whitePieceWeight = (double) -1 * value;
+            whitePieceWeights.put(key.toUpperCase(), whitePieceWeight);
+        });
 
-        // merge maps
-        whitePieceWeights.forEach((key, value) -> { pieceWeight.put(key, value); });
+        // merge maps - do not need to worry about overwriting keys
+        pieceWeight.putAll(whitePieceWeights);
     }
 
     /**
@@ -45,7 +45,11 @@ public class MaterialEvaluator implements BoardEvaluator {
         return pieceWeight;
     }
 
-    
+    /**
+     * Evaluates the board by summing all material currently on the board, given the
+     * point mappings defined in the {@code pieceWeight} instance variable.
+     * @return A double indicating total piece value on the board.
+     */
     @Override
     public double evaluationScheme(Board board) {
         double materialSum = 0;
