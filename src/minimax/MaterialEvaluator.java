@@ -1,8 +1,14 @@
 package minimax;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 
 import com.github.bhlangonijr.chesslib.Board;
+import com.github.bhlangonijr.chesslib.Side;
 
 /**
  * A simple evaluation class for chess pieces. Defines piece weight using the conventional
@@ -52,6 +58,19 @@ public class MaterialEvaluator implements BoardEvaluator {
      */
     @Override
     public double evaluationScheme(Board board) {
+        if (board.isMated()) {
+            // if black is mated, white has won
+            if (board.getSideToMove() == Side.BLACK) {
+                return 1e6d;
+            } else {
+            // else if white is mated, black has won
+                return -1e6d;
+            }
+            // if board is stalemated, return 0 as its a draw
+        } else if (board.isStaleMate()) {
+            return 0d;
+        }
+
         double materialSum = 0;
         for (char position: board.toString().replaceAll("Side:.*", "").toCharArray()) {
             String piece = Character.toString(position);
@@ -61,6 +80,4 @@ public class MaterialEvaluator implements BoardEvaluator {
         }
         return materialSum;
     }
-
 }
-

@@ -4,6 +4,7 @@ import com.github.bhlangonijr.chesslib.move.Move;
 import com.github.bhlangonijr.chesslib.Board;
 import com.github.bhlangonijr.chesslib.Side;
 
+import java.lang.Math;
 /**
  * Class for creating Minimax objects to predict the best move for an AI playing chess.
  * @author Saurav Kiri
@@ -18,7 +19,7 @@ public class SimpleMinimax implements Strategy {
      * the basic {@code MaterialEvaluator}
      */
     public SimpleMinimax() {
-        this(10, new MaterialEvaluator());
+        this(4, new MaterialEvaluator());
     }
 
     /**
@@ -36,25 +37,57 @@ public class SimpleMinimax implements Strategy {
      * @param eval : an object of class {@code BoardEvaluator}
      */
     public SimpleMinimax(int depth, BoardEvaluator eval) {
-        if (depth < 0) {
+        if (depth < 1) {
             System.out.println("Invalid depth given. Setting default depth (10).");
-            this.depth = 10;
+            this.depth = 4;
         } else {
             this.depth = depth;
         }
         this.eval = eval;
     }
 
-    public 
+    @Override
+    public Move findBestMove(Board board) {
+        // initialize optimal moves
+        Move optimalMove = null;
+        double optimalScore;
+        Side player = board.getSideToMove();
+        if (player == Side.WHITE) optimalScore = Double.NEGATIVE_INFINITY; else optimalScore = Double.POSITIVE_INFINITY;
 
-    public static void main(String[] args) {
-        Board board = new Board();
-        String side = board.getSideToMove().toString();
-        System.out.println(side);
-        Side newSide = Side.BLACK;
+        for (Move move: board.legalMoves()) {
+            board.doMove(move);
+            double moveEval = numericalMoveCalculator(board, this.depth - 1);
+            if ((player == Side.WHITE && moveEval > optimalScore) || (player == Side.BLACK && moveEval < optimalScore)) {
+                optimalScore = moveEval;
+                optimalMove = move;
+            }
+            board.undoMove();
+        }
+        return optimalMove;
     }
 
+    private double numericalMoveCalculator(Board board, int depth) {
+        if (depth == 0) {
+            return this.eval.evaluationScheme(board);
+        }
 
+        if (board.getSideToMove() == Side.WHITE) {
+            double maxScore = Double.NEGATIVE_INFINITY;
+            for (Move move: board.legalMoves()) {
+                board.doMove(move);
+                maxScore = Math.max(maxScore, numericalMoveCalculator(board, depth - 1));
+                board.undoMove();
+            }
+            return maxScore;
 
-    
+        } else {
+            double minScore = Double.POSITIVE_INFINITY;
+            for (Move move: board.legalMoves()) {
+                board.doMove(move);
+                minScore = Math.min(minScore, numericalMoveCalculator(board, depth - 1));
+                board.undoMove();
+            }
+            return minScore;
+        }
+    }    
 }
