@@ -1,6 +1,7 @@
 package minimax;
 
 import java.util.HashMap;
+
 import com.github.bhlangonijr.chesslib.Board;
 import com.github.bhlangonijr.chesslib.Side;
 
@@ -28,7 +29,9 @@ public class MaterialEvaluator implements BoardEvaluator {
         pieceWeight.put("k", -100d);
         
         // add white pieces - simply make chars upper case, add positive values
-        pieceWeight.forEach((key, value) -> pieceWeight.put(key.toUpperCase(), -value));
+        HashMap<String, Double> whitePieceWeight = new HashMap<>();
+        pieceWeight.forEach((key, value) -> whitePieceWeight.put(key.toUpperCase(), -value));
+        pieceWeight.putAll(whitePieceWeight);
     }
 
     /**
