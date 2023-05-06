@@ -39,7 +39,7 @@ public class SimpleMinimax implements Strategy {
      */
     public SimpleMinimax(int depth, BoardEvaluator eval) {
         if (depth < 1) {
-            System.out.println("Invalid depth given. Setting default depth (10).");
+            System.out.println("Invalid depth given. Setting default depth (4).");
             this.depth = 4;
         } else {
             this.depth = depth;
