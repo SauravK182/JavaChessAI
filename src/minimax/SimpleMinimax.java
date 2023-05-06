@@ -5,6 +5,7 @@ import com.github.bhlangonijr.chesslib.Board;
 import com.github.bhlangonijr.chesslib.Side;
 
 import java.lang.Math;
+
 /**
  * Class for creating Minimax objects to predict the best move for an AI playing chess.
  * @author Saurav Kiri
@@ -46,60 +47,99 @@ public class SimpleMinimax implements Strategy {
         this.eval = eval;
     }
 
-    @Override
-    public Move findBestMove(Board board) {
-        // initialize optimal moves
-        Move optimalMove = null;
-        double optimalScore;
-        Side player = board.getSideToMove();
-        if (player == Side.WHITE) optimalScore = Double.NEGATIVE_INFINITY; else optimalScore = Double.POSITIVE_INFINITY;
+    private class PositionEval implements Comparable<PositionEval> {
+        private double moveScore;
+        private Move move;
 
-        for (Move move: board.legalMoves()) {
-            board.doMove(move);
-            double moveEval = numericalMoveCalculator(board, this.depth - 1);
-            board.undoMove();
-            if ((player == Side.WHITE && moveEval > optimalScore) || (player == Side.BLACK && moveEval < optimalScore)) {
-                optimalScore = moveEval;
-                optimalMove = move;
+        public PositionEval(double moveScore, Move move) {
+            this.moveScore = moveScore;
+            this.move = move;
+        }
+        
+        public double getMoveScore() {
+            return this.moveScore;
+        }
+
+        public Move getMove() {
+            return this.move;
+        }
+
+        public int compareTo(PositionEval o2) {
+            if (this.moveScore < o2.moveScore) {
+                return -1;
+            } else if (this.moveScore > o2.moveScore) {
+                return 1;
+            } else {
+                return 0;
             }
         }
-        return optimalMove;
+
+        public static PositionEval min(PositionEval e1, PositionEval e2) {
+            if (e1.compareTo(e2) < 0) {
+                return e1;
+            }
+            return e2;
+        }
+
+        public static PositionEval max(PositionEval e1, PositionEval e2) {
+            if (e1.compareTo(e2) > 0) {
+                return e1;
+            }
+            return e2;
+        }
     }
 
-    private double numericalMoveCalculator(Board board, int depth) {
+    /**
+     * Finds the best move based on the minimax algorithm at the {@code depth} specified in this
+     * {@code Minimax} object.
+     * @param board : A {@code board} object
+     */
+
+    @Override
+    public Move findBestMove(Board board) {
+        return numericalMoveCalculator(board, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, this.depth).getMove();
+    }
+
+    /**
+     * Calculates the evaluation for a particular move path based on minimax with alpha-beta pruning
+     * @param board : a {@code Board} object from chesslib
+     * @param alpha : maximum score for maximizing player
+     * @param beta : minimum score for minimizing player
+     * @param depth : number of moves at which to look into the future.
+     * @return : an object of {@code PositionEval} which stores move and eval.
+     */
+    private PositionEval numericalMoveCalculator(Board board, double alpha, double beta, int depth) {
         if (depth == 0) {
-            return this.eval.evaluationScheme(board);
+            return new PositionEval(this.eval.evaluationScheme(board), null);
         }
 
         if (board.getSideToMove() == Side.WHITE) {
-            double maxScore = Double.NEGATIVE_INFINITY;
+            PositionEval maxMove = new PositionEval(Double.NEGATIVE_INFINITY, null);
             for (Move move: board.legalMoves()) {
                 board.doMove(move);
-                maxScore = Math.max(maxScore, numericalMoveCalculator(board, depth - 1));
+                double eval = numericalMoveCalculator(board, alpha, beta, depth - 1).getMoveScore();
                 board.undoMove();
+                maxMove = PositionEval.max(new PositionEval(eval, move), maxMove);
+                alpha = Math.max(alpha, eval);
+                if (beta <= alpha) {
+                    break;
+                }
             }
-            return maxScore;
-
+            return maxMove;
+        
         } else {
-            double minScore = Double.POSITIVE_INFINITY;
+            PositionEval minMove = new PositionEval(Double.POSITIVE_INFINITY, null);
             for (Move move: board.legalMoves()) {
                 board.doMove(move);
-                minScore = Math.min(minScore, numericalMoveCalculator(board, depth - 1));
+                double eval = numericalMoveCalculator(board, alpha, beta, depth - 1).getMoveScore();
                 board.undoMove();
+                minMove = PositionEval.min(new PositionEval(eval, move), minMove);
+                beta = Math.min(beta, eval);
+                if (beta <= alpha) {
+                    break;
+                }
             }
-            return minScore;
+            return minMove;
         }
-    }
-
-    public static void main(String[] args) {
-        SimpleMinimaxImproved test = new SimpleMinimaxImproved(4);
-        SimpleMinimax test2 = new SimpleMinimax(4);
-        Board board = new Board();
-        System.out.println(test.findBestMove(board).toString());
-
-        board.doMove("g1h3");
-        System.out.println(test.findBestMove(board));
-        System.out.println(test2.findBestMove(board));
-        System.out.println(board.legalMoves().toString());
     }
 }
