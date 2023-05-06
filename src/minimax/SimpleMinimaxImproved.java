@@ -5,12 +5,13 @@ import com.github.bhlangonijr.chesslib.Board;
 import com.github.bhlangonijr.chesslib.Side;
 
 import java.lang.Math;
+
 /**
  * Class for creating Minimax objects to predict the best move for an AI playing chess.
  * @author Saurav Kiri
  * @since May 04 2023
  */
-public class SimpleMinimax implements Strategy {
+public class SimpleMinimaxImproved implements Strategy {
     private int depth;
     private BoardEvaluator eval;
 
@@ -18,7 +19,7 @@ public class SimpleMinimax implements Strategy {
      * Makes a new default Minimax instance with a depth of 10 and
      * the basic {@code MaterialEvaluator}
      */
-    public SimpleMinimax() {
+    public SimpleMinimaxImproved() {
         this(4, new MaterialEvaluator());
     }
 
@@ -27,7 +28,7 @@ public class SimpleMinimax implements Strategy {
      * the basic {@code MaterialEvaluator}
      * @param depth : integer, representing the number of moves into the future to look into
      */
-    public SimpleMinimax(int depth) {
+    public SimpleMinimaxImproved(int depth) {
         this(depth, new MaterialEvaluator());
     }
 
@@ -36,7 +37,7 @@ public class SimpleMinimax implements Strategy {
      * @param depth : integer, representing number of moves into the future to look into
      * @param eval : an object of class {@code BoardEvaluator}
      */
-    public SimpleMinimax(int depth, BoardEvaluator eval) {
+    public SimpleMinimaxImproved(int depth, BoardEvaluator eval) {
         if (depth < 1) {
             System.out.println("Invalid depth given. Setting default depth (10).");
             this.depth = 4;
@@ -46,6 +47,79 @@ public class SimpleMinimax implements Strategy {
         this.eval = eval;
     }
 
+    private class PositionEval implements Comparable<PositionEval> {
+        private double moveScore;
+        private Move move;
+
+        public PositionEval(double moveScore, Move move) {
+            this.moveScore = moveScore;
+            this.move = move;
+        }
+        
+        public double getMoveScore() {
+            return this.moveScore;
+        }
+
+        public Move getMove() {
+            return this.move;
+        }
+
+        public int compareTo(PositionEval o2) {
+            if (this.moveScore < o2.moveScore) {
+                return -1;
+            } else if (this.moveScore > o2.moveScore) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+
+        public static PositionEval min(PositionEval e1, PositionEval e2) {
+            if (e1.compareTo(e2) < 0) {
+                return e1;
+            }
+            return e2;
+        }
+
+        public static PositionEval max(PositionEval e1, PositionEval e2) {
+            if (e1.compareTo(e2) > 0) {
+                return e1;
+            }
+            return e2;
+        }
+    }
+
+    @Override
+    public Move findBestMove(Board board) {
+        return numericalMoveCalculator(board, this.depth).getMove();
+    }
+
+    private PositionEval numericalMoveCalculator(Board board, int depth) {
+        if (depth == 0) {
+            return new PositionEval(this.eval.evaluationScheme(board), null);
+        }
+
+        if (board.getSideToMove() == Side.WHITE) {
+            PositionEval maxMove = new PositionEval(Double.NEGATIVE_INFINITY, null);
+            for (Move move: board.legalMoves()) {
+                board.doMove(move);
+                maxMove = PositionEval.max(new PositionEval(numericalMoveCalculator(board, depth - 1).getMoveScore(), move), maxMove);
+                board.undoMove();
+            }
+            return maxMove;
+        
+        } else {
+            PositionEval minMove = new PositionEval(Double.POSITIVE_INFINITY, null);
+            for (Move move: board.legalMoves()) {
+                board.doMove(move);
+                minMove = PositionEval.min(new PositionEval(numericalMoveCalculator(board, depth - 1).getMoveScore(), move), minMove);
+                board.undoMove();
+            }
+            return minMove;
+        }
+    }
+
+    /*
     @Override
     public Move findBestMove(Board board) {
         // initialize optimal moves
@@ -90,16 +164,5 @@ public class SimpleMinimax implements Strategy {
             return minScore;
         }
     }
-
-    public static void main(String[] args) {
-        SimpleMinimaxImproved test = new SimpleMinimaxImproved(4);
-        SimpleMinimax test2 = new SimpleMinimax(4);
-        Board board = new Board();
-        System.out.println(test.findBestMove(board).toString());
-
-        board.doMove("g1h3");
-        System.out.println(test.findBestMove(board));
-        System.out.println(test2.findBestMove(board));
-        System.out.println(board.legalMoves().toString());
-    }
+    */
 }
