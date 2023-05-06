@@ -11,11 +11,13 @@ import org.junit.jupiter.api.Test;
 public class TestMinimax {
     Board board;
     SimpleMinimax mini;
+    AdvancedMinimax advMini;
 
     @BeforeEach
     void setUp() {
         board = new Board();
         mini = new SimpleMinimax();
+        advMini = new AdvancedMinimax();
     }
 
     @Test
@@ -26,5 +28,9 @@ public class TestMinimax {
     }
 
     @Test
-    void 
+    void testAdvMiniPreservesBoard() {
+        Board board2 = new Board();
+        advMini.findBestMove(board);
+        Assertions.assertTrue(board.equals(board2));
+    }
 }
