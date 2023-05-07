@@ -49,6 +49,10 @@ public class BoardGUI {
      * @param board : a {@code Board} object from the {@code chesslib} library.
      */
     public static void drawBoard(Board board) {
+        if (frame != null) {
+            frame.dispose(); // close frame when re-drawing a new one
+        }
+
         initializeFrame();
         HashMap<String, String> pieces = ChessImages.getPieces();
 
