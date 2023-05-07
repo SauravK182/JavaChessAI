@@ -24,8 +24,7 @@ public class SimpleMinimaxTest
      */
     public static void main(String[] args) throws InterruptedException 
     {
-        SimpleMinimaxTest test = new SimpleMinimaxTest();
-        test.testSimpleMinimax();
+        testSimpleMinimax();
     }
 
     /**

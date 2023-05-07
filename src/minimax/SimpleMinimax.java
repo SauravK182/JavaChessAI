@@ -12,8 +12,8 @@ import java.lang.Math;
  * @since May 04 2023
  */
 public class SimpleMinimax implements Strategy {
-    private int depth;
-    private BoardEvaluator eval;
+    protected int depth;
+    protected BoardEvaluator eval;
 
     /**
      * Makes a new default Minimax instance with a depth of 10 and
