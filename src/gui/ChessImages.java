@@ -8,22 +8,27 @@ import java.util.HashMap;
  */
 public class ChessImages {
     
+    /**
+     * Defines the mapping between the String representation of pieces and
+     * their associated images in the {@code resources} folder.
+     * The leading slash indicates the root of the classpath
+     */
     public static final HashMap<String, String> PIECES;
 
     static {
         PIECES = new HashMap<>();
-        PIECES.put("p", "./images/pawnblack.png");
-        PIECES.put("r", "./images/blackrook.png");
-        PIECES.put("n", "./images/blackknight.png");
-        PIECES.put("b", "./images/blackbishop.png");
-        PIECES.put("q", "./images/blackqueen.png");
-        PIECES.put("k", "./images/blackking.png");
-        PIECES.put("P", "./images/pawnwhite.png");
-        PIECES.put("R", "./images/whiterook.png");
-        PIECES.put("N", "./images/whiteknight.png");
-        PIECES.put("B", "./images/whitebishop.png");
-        PIECES.put("Q", "./images/whitequeen.png");
-        PIECES.put("K", "./images/whiteking.png");
+        PIECES.put("p", "/resources/pawnblack.png");
+        PIECES.put("r", "/resources/blackrook.png");
+        PIECES.put("n", "/resources/blackknight.png");
+        PIECES.put("b", "/resources/blackbishop.png");
+        PIECES.put("q", "/resources/blackqueen.png");
+        PIECES.put("k", "/resources/blackking.png");
+        PIECES.put("P", "/resources/pawnwhite.png");
+        PIECES.put("R", "/resources/whiterook.png");
+        PIECES.put("N", "/resources/whiteknight.png");
+        PIECES.put("B", "/resources/whitebishop.png");
+        PIECES.put("Q", "/resources/whitequeen.png");
+        PIECES.put("K", "/resources/whiteking.png");
     }
 
     private ChessImages() { }

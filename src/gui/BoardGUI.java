@@ -1,5 +1,7 @@
 package gui;
 import java.awt.*;
+import java.net.URL;
+
 import javax.swing.*;
 
 import com.github.bhlangonijr.chesslib.Board;
@@ -51,7 +53,15 @@ public class BoardGUI {
      * @return : Scaled down image icon (60x60 pixels) that can be used on a {@code JLabel}
      */
     private static ImageIcon scaleDownImage(String filepath) {
-        return new ImageIcon(new ImageIcon(filepath).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
+        /*
+         * Use a URL object to get a link to a resource (in /resources) on the classpath for the image
+         * This allows the jar to be standalone from the images so the two don't need to be coupled
+         * See https://stackoverflow.com/questions/23628914/
+         * https://stackoverflow.com/questions/1096398/
+         * https://stackoverflow.com/questions/12488836/
+         */
+        URL url = BoardGUI.class.getResource(filepath);
+        return new ImageIcon(new ImageIcon(url).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
     }
 
     /**
