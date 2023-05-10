@@ -15,12 +15,13 @@ import com.github.bhlangonijr.chesslib.Board;
 public class BoardGUI {
 
     private static JFrame frame;
+    private static String[] files = {"a", "b", "c", "d", "e", "f", "g", "h"};
 
     private static void initializeFrame() {
         frame = new JFrame("Chess Board");
         frame.setVisible(false);
         frame.setLayout(new GridLayout(8, 8));
-        frame.setSize(500, 500);
+        frame.setSize(540, 540);
         frame.setLocationRelativeTo(null);
 
         /* print a confirmation window for closing the GUI - code from:
@@ -54,7 +55,6 @@ public class BoardGUI {
         }
 
         initializeFrame();
-        HashMap<String, String> pieces = ChessImages.getPieces();
 
         /* isolate only the pieces of the board
          * split string based on newlines to recover board positioning
@@ -75,11 +75,32 @@ public class BoardGUI {
                 }
 
                 // place piece, if one is present
+                JLabel lab;
                 String position = Character.toString(rank.charAt(j));
-                if (pieces.containsKey(position)) {
-                    ImageIcon piece = scaleDownImage(pieces.get(position));
-                    gridPos.add(new JLabel(piece));
+                if (ChessImages.PIECES.containsKey(position)) {
+                    ImageIcon piece = scaleDownImage(ChessImages.PIECES.get(position));
+                    lab = new JLabel(piece, SwingConstants.LEADING);                 
+                } else {
+                    lab = new JLabel("", SwingConstants.LEADING);
+                    gridPos.setLayout(new BorderLayout());
                 }
+                
+                // configure text alignment for JLabel to bottom left
+                // see http://www.java2s.com/Code/Java/Swing-JFC/LabelTextPosition.htm
+                lab.setHorizontalTextPosition(SwingConstants.LEFT);
+                lab.setVerticalTextPosition(SwingConstants.BOTTOM);
+
+                // include rank and file on the ends of the board for increased user accessibility
+                if (j == 0 && i != 7) {
+                    lab.setText(Integer.toString(8 - i));
+                } else if (i == 7 && j != 0) {
+                    lab.setText(files[j].toUpperCase());
+                } else if (i == 7 && j == 0) {
+                    lab.setText("A1");
+                }
+                
+                // add JLabel to JPanel
+                gridPos.add(lab, BorderLayout.PAGE_END);
 
                 // add panel to frame
                 frame.add(gridPos);
