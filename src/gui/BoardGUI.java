@@ -2,8 +2,6 @@ package gui;
 import java.awt.*;
 import javax.swing.*;
 
-import java.util.HashMap;
-
 import com.github.bhlangonijr.chesslib.Board;
 
 
@@ -38,6 +36,7 @@ public class BoardGUI {
                                                   }
             }
         });
+        
     }
 
     private static ImageIcon scaleDownImage(String filepath) {
@@ -85,7 +84,7 @@ public class BoardGUI {
                     gridPos.setLayout(new BorderLayout());
                 }
                 
-                // configure text alignment for JLabel to bottom left
+                // configure text alignment for JLabel to bottom left to add text
                 // see http://www.java2s.com/Code/Java/Swing-JFC/LabelTextPosition.htm
                 lab.setHorizontalTextPosition(SwingConstants.LEFT);
                 lab.setVerticalTextPosition(SwingConstants.BOTTOM);

@@ -2,7 +2,6 @@ package game;
 
 import com.github.bhlangonijr.chesslib.Board;
 import com.github.bhlangonijr.chesslib.move.Move;
-import minimax.AdvancedMinimax;
 import minimax.SimpleMinimax;
 import minimax.Strategy;
 

@@ -8,15 +8,33 @@ import minimax.*;
 
 import java.util.Scanner;
 
+/**
+ * Main driver class for playing a chess game with an AI.
+ * @author Marios Petrov and Saurav Kiri
+ * @since May 08 2023
+ */
 public class ChessGame {
     private Board board;
     private Strategy ai;
 
+    /**
+     * Constructs a chess game object, which possesses the main driver play function
+     * that initiates a chess game with the computer.
+     * @param ai : An object of type {@code Strategy}, which has some move finder function to act as the computer.
+     */
     public ChessGame(Strategy ai) {
         this.board = new Board();
         this.ai = ai;
     }
 
+    /**
+     * Main function through which a chess game will be played.
+     * Given a user side, the user will type moves in the terminal and play back-and-forth with an AI
+     * until an end state is reached (checkmate/stalement), or the user quits, which can be done
+     * by closing the GUI at any point during the game.
+     * @param userSide : a {@code Side} object from the {@code chesslib} library, which represents
+     * which side the user will play as (should be {@code Side.WHITE} or {@code Side.BLACK})
+     */
     public void play(Side userSide) {
         Scanner scanner = new Scanner(System.in);
         BoardGUI.drawBoard(board);
