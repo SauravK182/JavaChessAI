@@ -21,6 +21,7 @@ public class BoardGUI {
         frame.setLayout(new GridLayout(8, 8));
         frame.setSize(540, 540);
         frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         /* print a confirmation window for closing the GUI - code from:
          * https://stackoverflow.com/questions/9093448/
