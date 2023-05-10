@@ -36,6 +36,11 @@ public class AdvancedMinimax extends SimpleMinimax {
         super(depth);
     }
 
+    /**
+     * Constructs an AdvancedMinimax object with the specified depth and BoardEvaluator object.
+     * @param depth : An integer representing the maximum depth to search through
+     * @param eval : A {@code BoardEvaluator} object.
+     */
     public AdvancedMinimax(int depth, BoardEvaluator eval) {
         super(depth, eval);
     }
@@ -66,6 +71,8 @@ public class AdvancedMinimax extends SimpleMinimax {
      * using the minimax algorithm.
      * @param board The board state to evaluate.
      * @param depth The maximum depth to search.
+     * @param alpha : current minimum score for maximizing player
+     * @param beta : current maximum score for minimizing player.
      * @return The score of the board state.
      */
     
@@ -101,6 +108,16 @@ public class AdvancedMinimax extends SimpleMinimax {
         }
     }
 
+    /**
+     * Implementation of the quiescent search algorithm, which extends the normal minimax approach
+     * if the current board state is considered volatile, as measured by alpha and beta
+     * @param board : A {@code Board} object from chesslib
+     * @param alpha : Double
+     * @param beta : Double
+     * @param isMaximizingPlayer : Boolean, representing whether the current player is the maximizing player or not (i.e.,
+     * if player is playing white or not).
+     * @return
+     */
     private double quiescenceSearch(Board board, double alpha, double beta, boolean isMaximizingPlayer) {
         double eval = this.eval.evaluationScheme(board);
 

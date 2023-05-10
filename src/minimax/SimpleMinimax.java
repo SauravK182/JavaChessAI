@@ -46,24 +46,49 @@ public class SimpleMinimax implements Strategy {
         }
         this.eval = eval;
     }
-
+    
+    /**
+     * Inner class that stores both a move and its score as calculated by the Minimax
+     * algorithm. Implements the {@code Comparable} interface by comparing move scores.
+     */
     private class PositionEval implements Comparable<PositionEval> {
         private double moveScore;
         private Move move;
 
+        /**
+         * Constructs a {@code PositionEval} object based on a {@code Move} object
+         * and its Minimax score.
+         * @param moveScore : Numerical score computed by, e.g., minimax
+         * @param move : A {@code move} object from the chesslib library.
+         */
         public PositionEval(double moveScore, Move move) {
             this.moveScore = moveScore;
             this.move = move;
         }
         
+        /**
+         * Returns the move score for the current {@code PositionEval} object.
+         * @return : A double, representing the move score.
+         */
         public double getMoveScore() {
             return this.moveScore;
         }
 
+        /**
+         * Returns the {@code Move} object associated with this {@code PositionEval} object.
+         * @return : A {@code Move} object.
+         */
         public Move getMove() {
             return this.move;
         }
 
+        /**
+         * Compares two {@code PositionEval} objects based on their move score.
+         * @return : Returns 1 if the current object has a higher score than {@code e2},
+         * -1 if the current object has a lower score than {@code e2},
+         * or 0 if they have an equivalent score.
+         */
+        @Override
         public int compareTo(PositionEval o2) {
             if (this.moveScore < o2.moveScore) {
                 return -1;
@@ -74,6 +99,14 @@ public class SimpleMinimax implements Strategy {
             }
         }
 
+        /**
+         * Using the implemented {@code compareTo} method from the {@code Comparable} interface,
+         * finds the {@code PositionEval} object which has the minimum score.
+         * @param e1 : A {@code PositionEval} object to compare to {@code e2}.
+         * @param e2 : A {@code PositionEval} object
+         * @return : Will return {@code e1} if the score for {@code e1} is strictly less than {@code e2},
+         * otherwise, simply returns {@code e2}.
+         */
         public static PositionEval min(PositionEval e1, PositionEval e2) {
             if (e1.compareTo(e2) < 0) {
                 return e1;
@@ -81,6 +114,14 @@ public class SimpleMinimax implements Strategy {
             return e2;
         }
 
+        /**
+         * Using the implemented {@code compareTo} method from the {@code Comparable} interface,
+         * finds the {@code PositionEval} object which has the maximum score.
+         * @param e1 : A {@code PositionEval} object to compare to {@code e2}
+         * @param e2 : A {@code PositionEval} object.
+         * @return : Returns {@code e1} if the score associated with {@code e1} is strictly greater
+         * than the score for {@code e2}, otherwise returns {@code e2}.
+         */
         public static PositionEval max(PositionEval e1, PositionEval e2) {
             if (e1.compareTo(e2) > 0) {
                 return e1;

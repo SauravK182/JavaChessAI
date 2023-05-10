@@ -15,6 +15,11 @@ public class BoardGUI {
     private static JFrame frame;
     private static String[] files = {"a", "b", "c", "d", "e", "f", "g", "h"};
 
+    /**
+     * Initializes the {@code JFrame} with an 8x8 {@code GridLayout} for drawing a chessboard.
+     * Will also set the size to be 540x540 and adds a confirm dialog box to closing the window,
+     * which upon confirming, will exit the program.
+     */
     private static void initializeFrame() {
         frame = new JFrame("Chess Board");
         frame.setVisible(false);
@@ -40,6 +45,11 @@ public class BoardGUI {
         
     }
 
+    /**
+     * Scales down an image to fit on a 540x540 pixel JFrame chessboard, given its filepath.
+     * @param filepath : Path to a valid file.
+     * @return : Scaled down image icon (60x60 pixels) that can be used on a {@code JLabel}
+     */
     private static ImageIcon scaleDownImage(String filepath) {
         return new ImageIcon(new ImageIcon(filepath).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
     }
